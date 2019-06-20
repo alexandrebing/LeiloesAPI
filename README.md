@@ -12,13 +12,13 @@ Response:
   { 
     "id" "2", 
     "title": "Desktop", 
-    "price": 159900, 
+    "price": "159900", 
     "createdAt": "2019-06-20T00:30:30.799Z"
   },
   { 
     "id" "1", 
     "title": "Notebook", 
-    "price": 199900, 
+    "price": "199900", 
     "createdAt": "2019-06-20T00:30:30.799Z"
   }
 ]
@@ -32,12 +32,12 @@ Response:
 [
   {
     "id": "2",
-    "price": 239900,
+    "price": "239900",
     "createdAt": "2019-06-21T00:45:50.799Z"
   }
   {
     "id": "1",
-    "price": 219900,
+    "price": "219900",
     "createdAt": "2019-06-20T00:45:50.799Z"
   }
 ]
@@ -49,7 +49,7 @@ Response:
 Request:
 ```json
 {
-  "price": 2199000
+  "price": "2199000"
 }
 ```
 
