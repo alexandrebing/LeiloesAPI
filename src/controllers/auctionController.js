@@ -3,6 +3,18 @@ const auctionModel = require('../models/auctionModel');
 const bidModel = require('../models/bidModel');
 const { ResourceNotFoundError, InvalidPriceError } = require('../errors');
 
+exports.create = async (req, res, next) => {
+  try {
+    const auction = await database.transaction(async (trx) => {
+      const auctionId = await auctionModel.create(req.body).transacting(trx);
+      return await auctionModel.getById(auctionId).transacting(trx);
+    });
+    res.send(auction);
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.list = async (req, res, next) => {
   try {
     const auctions = await auctionModel.getAll();

@@ -13,4 +13,7 @@ exports.updateById = (id, data) => database
   .table('auctions')
   .where('id', id)
   .update(data);
-  
+
+exports.create = (data) => database
+  .table('autction')
+  .insert(data);
