@@ -46,13 +46,14 @@ exports.makeBid = async (req, res, next) => {
       }
 
       const { price } = req.body;
+      console.log({ auction, price })
       if (price <= auction.price) {
         throw new InvalidPriceError();
       }
 
       await Promise.all([
-        auctionModel.updateById({ price }).transacting(trx),
-        bidModel.create({ auctionId: auction.id, price }),
+        auctionModel.updateById(auction.id, { price }).transacting(trx),
+        bidModel.create({ auctionId: auction.id, price }).transacting(trx),
       ]);
     });
 

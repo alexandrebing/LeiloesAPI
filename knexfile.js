@@ -20,13 +20,10 @@ module.exports = {
           }
         }
         case 'LONGLONG': {
-          if (field.name === 'price' && field.table === 'auctions') {
-            return parseInt(field.string(), 10) / 100;
-          }
           return field.string();
         }
         case 'TINY': {
-          return field.string() === '1';
+          return field.string() === '1';  
         }
       }
       return next();
