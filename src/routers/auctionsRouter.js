@@ -1,11 +1,12 @@
 const express = require('express');
-const auctioController = require('../controllers/auctionController');
+const authMiddleware = require('../middlewares/authMiddleware');
+const auctionController = require('../controllers/auctionController');
 
 const router = express.Router({ mergeParams: true });
-
-router.get('/', auctioController.list);
-router.post('/', auctioController.create);
-router.get('/:id/bids', auctioController.listBids);
-router.post('/:id/bids', auctioController.makeBid);
+router.get('/', auctionController.list);
+router.post('/', authMiddleware, auctionController.create);
+router.get('/:id/bids', auctionController.listBids);
+router.post('/:id/bids', authMiddleware, auctionController.makeBid);
+router.patch('/:id/finish', authMiddleware, auctionController.finish);
 
 module.exports = router;

@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   /* Application */
+  SECRET: process.env.SECRET,
   PORT: parseInt(process.env.PORT, 10) || 3000,
   NODE_ENV: process.env.NODE_ENV,
   BODY_LIMIT: process.env.BODY_LIMIT || '500kb',

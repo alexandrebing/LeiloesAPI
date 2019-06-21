@@ -1,12 +1,24 @@
 const faker = require('faker');
+const randomNumber = require('random-number');
 
 /**
  * @param {import('knex')} knex
  */
-exports.seed = knex => {
+exports.seed = async knex => {
   const rows = [];
+  const users = await knex('users').select('id');
   for (let i = 0; i < 5; i++) {
-    rows.push({ title: faker.commerce.product(), price: faker.finance.amount(10000, 9999999) });
+    const randomIndex = randomNumber({
+      integer: true,
+      min: 0,
+      max: users.length - 1,
+    });
+    const randomUser = users[randomIndex];
+    rows.push({ 
+      title: faker.commerce.product(), 
+      price: faker.finance.amount(1000, 99999),
+      creatorId: randomUser.id,
+    });
   }
-  return knex('auctions').insert(rows);
+  await knex('auctions').insert(rows);
 };
