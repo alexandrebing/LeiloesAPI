@@ -19,9 +19,6 @@ module.exports = {
             return null;
           }
         }
-        case 'LONGLONG': {
-          return field.string();
-        }
         case 'TINY': {
           return field.string() === '1';  
         }

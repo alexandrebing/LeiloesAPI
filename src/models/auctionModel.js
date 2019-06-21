@@ -2,7 +2,8 @@ const database = require('../database');
 
 exports.getAll = () => database
   .table('auctions')
-  .orderBy('title', 'asc');
+  .orderBy('title', 'asc')
+  .orderBy('price', 'asc');
 
 exports.getById = (id) => database
   .table('auctions')
@@ -15,5 +16,5 @@ exports.updateById = (id, data) => database
   .update(data);
 
 exports.create = (data) => database
-  .table('autction')
+  .table('auctions')
   .insert(data);
