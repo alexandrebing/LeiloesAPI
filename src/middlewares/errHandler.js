@@ -6,6 +6,8 @@ module.exports = (err, req, res, next) => {
     res.status(400).send({ code: 'INVALID_PRICE' });
   } else if (err instanceof errors.AlreadyFinishedAuctionError) {
     res.status(400).send({ code: 'ALREADY_FINISHED_AUCTION' });
+  } else if (err instanceof errors.InsufficientFundsError) {
+    res.status(400).send({ code: 'INSUFFICIENT_FUNDS' });
   } else if (err instanceof errors.AuthorizationError) {
     res.status(401).send({ code: 'NOT_AUTHORIZED' });
   } else if (err instanceof errors.ResourceNotFoundError) {

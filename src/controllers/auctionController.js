@@ -4,11 +4,12 @@ const bidModel = require('../models/bidModel');
 const userModel = require('../models/userModel');
 const helpers = require('../helpers');
 
-const { 
-  ResourceNotFoundError, 
+const {
+  ResourceNotFoundError,
   InvalidPriceError,
-   AuthorizationError, 
-   AlreadyFinishedAuctionError 
+  AuthorizationError,
+  AlreadyFinishedAuctionError,
+  InsufficientFundsError
 } = require('../errors');
 
 const formatAuction = (auction) => ({
@@ -24,6 +25,7 @@ const formatBid = (bid) => ({
 exports.create = async (req, res, next) => {
   try {
     const auction = await database.transaction(async (trx) => {
+      console.log(req.body);
       const auctionId = await auctionModel.create({
         ...req.body,
         creatorId: req.user.id,
@@ -71,14 +73,20 @@ exports.makeBid = async (req, res, next) => {
         throw new AuthorizationError();
       }
 
-      const price = priceToBigInteger(req.body.price);
-      if (price <= auction.price) {
+      const auctionPrice = helpers.bigIntegerToPrice(auction.price);
+      const price = req.body.price;
+      if (price <= auctionPrice) {
         throw new InvalidPriceError();
       }
 
+      const balance = helpers.bigIntegerToPrice(req.user.balance);
+      if (balance < price) {
+        throw new InsufficientFundsError();
+      }
+
       await Promise.all([
-        auctionModel.updateById(auction.id, { price }).transacting(trx),
-        bidModel.create({ auctionId: auction.id, userId: req.user.id, price }).transacting(trx),
+        auctionModel.updateById(auction.id, { price: helpers.priceToBigInteger(price) }).transacting(trx),
+        bidModel.create({ auctionId: auction.id, userId: req.user.id, price: helpers.bigIntegerToPrice(price) }).transacting(trx),
       ]);
     });
 
