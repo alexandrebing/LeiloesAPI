@@ -13,9 +13,11 @@ exports.getCatalog = () => database
   .table('auctions')
   .innerJoin('users as creator', 'creator.id', 'auctions.creatorId')
   .leftJoin('users as winner', 'winner.id', 'auctions.winnerId')
-  .where('status', 'PENDING')
   .orderBy('title', 'asc')
   .orderBy('price', 'asc');
+
+exports.getCustomerCatalog = () => exports.getCatalog()
+    .where('status', 'PENDING');
 
 exports.getById = (id) => database
   .table('auctions')

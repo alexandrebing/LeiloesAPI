@@ -41,8 +41,13 @@ exports.create = async (req, res, next) => {
 
 exports.list = async (req, res, next) => {
   try {
-    const auctions = await auctionModel.getCatalog();
-    res.send(auctions.map(formatAuction));
+    let auction = [];
+    if (req.user && req.user.isAdmin) {
+      auction = await auctionModel.getCatalog();
+    } else {
+      auction = await auctionModel.getCustomerCatalog();
+    }
+    res.send(auction.map(formatAuction));
   } catch (err) {
     next(err);
   }
@@ -86,7 +91,7 @@ exports.makeBid = async (req, res, next) => {
 
       await Promise.all([
         auctionModel.updateById(auction.id, { price: helpers.priceToBigInteger(price) }).transacting(trx),
-        bidModel.create({ auctionId: auction.id, userId: req.user.id, price: helpers.bigIntegerToPrice(price) }).transacting(trx),
+        bidModel.create({ auctionId: auction.id, userId: req.user.id, price: helpers.priceToBigInteger(price) }).transacting(trx),
       ]);
     });
 
@@ -104,7 +109,7 @@ exports.finish = async (req, res, next) => {
         .transacting(trx)
         .forUpdate();
 
-      if (!auction) {
+      if (!auction) { 
         throw new ResourceNotFoundError();
       }
 
