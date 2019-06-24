@@ -89,9 +89,11 @@ exports.makeBid = async (req, res, next) => {
         throw new InsufficientFundsError();
       }
 
+      const bigIntegerPrice = helpers.priceToBigInteger(price);
+
       await Promise.all([
-        auctionModel.updateById(auction.id, { price: helpers.priceToBigInteger(price) }).transacting(trx),
-        bidModel.create({ auctionId: auction.id, userId: req.user.id, price: helpers.priceToBigInteger(price) }).transacting(trx),
+        auctionModel.updateById(auction.id, { price: bigIntegerPrice }).transacting(trx),
+        bidModel.create({ auctionId: auction.id, userId: req.user.id, price: bigIntegerPrice }).transacting(trx),
       ]);
     });
 
