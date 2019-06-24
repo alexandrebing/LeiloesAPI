@@ -26,7 +26,7 @@
 
 `$ npm install`
 
-- Altere o arquivo `.env` e inclua os dados do seu BD
+- Crie um arquivo `.env` com os dados do `.env.sample` e altere os dados do seu BD
 
 ```
 	DB_DATABASE=leiloes
